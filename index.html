@@ -11,6 +11,7 @@
     --verde-fresco: #4CAF50;
     --verde-oscuro: #388E3C;
     --naranja-acento: #FF9800;
+    --rojo-cerrado: #E53935;
     --fondo-gris: #f8f9fa;
     --texto-principal: #333;
     --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -43,28 +44,79 @@ header h1 {
     font-weight: 700;
 }
 
-.btn-carrito-header { 
-    background: var(--naranja-acento); 
-    color: white; 
+/* --- Controles del Header --- */
+.header-controles {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espacio entre elementos */
+}
+
+/* Indicador de Estado */
+.estado-local {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: var(--verde-oscuro);
+    background: white;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.estado-local.cerrado {
+    color: #fff;
+    background: var(--rojo-cerrado);
+}
+
+/* Botones del header */
+.btn-header { 
     border: none; 
     padding: 10px 20px; 
     border-radius: 50px; 
     cursor: pointer; 
     font-weight: 600;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
-.btn-carrito-header:hover { 
+.btn-header:active {
+    transform: scale(0.95);
+}
+
+/* Botón Horarios (Nuevo) */
+.btn-horarios {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.4);
+}
+.btn-horarios:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+/* Botón Carrito */
+.btn-carrito { 
+    background: var(--naranja-acento); 
+    color: white; 
+}
+.btn-carrito:hover { 
     background: #e68900; 
 }
-.btn-carrito-header span { 
+.btn-carrito.deshabilitado {
+    background: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.btn-carrito span { 
     font-weight: 700; 
     background: rgba(255, 255, 255, 0.2); 
-    padding: 3px 8px; 
+    padding: 2px 8px; 
     border-radius: 20px; 
-    margin-left: 8px; 
     font-size: 0.9rem;
 }
 
+/* --- Layout Principal --- */
 .tienda-container { 
     display: flex; 
     gap: 20px; 
@@ -121,6 +173,8 @@ header h1 {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
     gap: 20px; 
 }
+
+/* --- Tarjeta Producto --- */
 .producto-card { 
     background: white; 
     border: 1px solid #ddd; 
@@ -137,11 +191,9 @@ header h1 {
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Cinta de oferta --- */
 .producto-card .cinta-oferta {
     position: absolute;
-    top: 10px;
-    left: -30px;
+    top: 10px; left: -30px;
     background: var(--verde-fresco);
     color: white;
     font-weight: 700;
@@ -153,50 +205,36 @@ header h1 {
     z-index: 10;
 }
 
-/* --- Imagenes --- */
 .producto-card img {
-    max-width: 100px;
-    height: auto;
+    max-width: 100px; height: auto;
     object-fit: contain;
     margin-bottom: 10px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    display: block; margin: 0 auto 10px;
 }
 
 .producto-card h3 { 
-    font-size: 1.1rem; 
-    margin: 8px 0; 
-    font-weight: 600;
-    min-height: 40px; 
+    font-size: 1.1rem; margin: 8px 0; font-weight: 600; min-height: 40px; 
 }
 .producto-card .precio { 
-    font-weight: 700; 
-    color: var(--naranja-acento); 
-    font-size: 1.4rem;
-    margin-bottom: 15px; 
+    font-weight: 700; color: var(--naranja-acento); font-size: 1.4rem; margin-bottom: 15px; 
 }
 .producto-card .btn-agregar { 
     background: var(--verde-fresco); 
     color: white; 
-    border: none; 
-    padding: 10px 15px; 
+    border: none; padding: 10px 15px; 
     border-radius: 25px; 
-    cursor: pointer;
-    font-weight: 600;
+    cursor: pointer; font-weight: 600;
     transition: background 0.2s;
-    width: 100%;
-    text-transform: uppercase;
+    width: 100%; text-transform: uppercase;
 }
 .producto-card .btn-agregar:disabled {
-    background: #ccc;
-    cursor: not-allowed;
+    background: #ccc; cursor: not-allowed;
 }
 .producto-card .btn-agregar:hover:not(:disabled) { 
     background: var(--verde-oscuro); 
 }
 
-/* --- Modal y Carrito --- */
+/* --- Modales --- */
 .modal-overlay { 
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: rgba(0, 0, 0, 0.7); 
@@ -205,132 +243,113 @@ header h1 {
     z-index: 1000; 
 }
 .modal-overlay.visible { 
-    visibility: visible; 
-    opacity: 1; 
-    transition-delay: 0s;
+    visibility: visible; opacity: 1; transition-delay: 0s;
 }
 .modal-content { 
-    background: white; 
-    padding: 30px; 
-    border-radius: 15px; 
-    width: 95%; 
-    max-width: 550px; 
-    max-height: 90vh; 
-    overflow-y: auto; 
+    background: white; padding: 30px; 
+    border-radius: 15px; width: 95%; max-width: 550px; 
+    max-height: 90vh; overflow-y: auto; 
     position: relative; 
-    transform: scale(0.95);
-    transition: transform 0.3s;
+    transform: scale(0.95); transition: transform 0.3s;
 }
 .modal-overlay.visible .modal-content {
     transform: scale(1);
 }
+.modal-close {
+    position: absolute; top: 15px; right: 20px;
+    background: none; border: none;
+    font-size: 2rem; cursor: pointer; color: #aaa;
+}
+.modal-close:hover { color: #333; }
 
+/* Estilos específicos Modal Horarios */
+.lista-horarios {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+.lista-horarios li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+.lista-horarios li:last-child {
+    border-bottom: none;
+}
+.lista-horarios li.dia-actual {
+    background-color: #e8f5e9;
+    color: var(--verde-oscuro);
+    font-weight: bold;
+    border-radius: 8px;
+    border-bottom: none;
+}
+
+/* --- Estilos Carrito Modal --- */
 .modal-carrito-item { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-bottom: 20px; 
-    padding-bottom: 15px; 
-    border-bottom: 1px dashed #ddd; 
+    display: flex; justify-content: space-between; align-items: center; 
+    margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed #ddd; 
 }
 .modal-carrito-item:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
+    border-bottom: none; margin-bottom: 0;
 }
 
-/* --- Botones + y – alineados --- */
 .controles-cantidad {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
 }
 .controles-cantidad .btn-cantidad { 
-    background: #f1f1f1; 
-    border: none; 
-    width: 35px; height: 35px; 
-    border-radius: 50%; 
-    cursor: pointer; 
-    font-size: 1.5rem; 
-    font-weight: bold;
-    color: var(--verde-oscuro);
-    transition: background 0.2s;
+    background: #f1f1f1; border: none; 
+    width: 35px; height: 35px; border-radius: 50%; 
+    cursor: pointer; font-size: 1.5rem; font-weight: bold;
+    color: var(--verde-oscuro); transition: background 0.2s;
 }
-.controles-cantidad .btn-cantidad:hover { 
-    background: #ddd; 
-}
+.controles-cantidad .btn-cantidad:hover { background: #ddd; }
 .controles-cantidad span { 
-    margin: 0 12px; 
-    font-size: 1.2rem; 
-    min-width: 25px; 
-    text-align: center; 
-    font-weight: 600;
+    margin: 0 12px; font-size: 1.2rem; min-width: 25px; text-align: center; font-weight: 600;
 }
 
 #form-cliente input { 
-    width: calc(100% - 20px); 
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    width: calc(100% - 20px); padding: 10px;
+    margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px;
 }
 .btn-whatsapp { 
-    background: #25D366; 
-    color: white; 
-    padding: 15px; 
-    font-size: 1.1rem;
-    margin-top: 15px; 
-    border-radius: 8px;
-    width: 100%;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
+    background: #25D366; color: white; padding: 15px; font-size: 1.1rem;
+    margin-top: 15px; border-radius: 8px; width: 100%; border: none;
+    cursor: pointer; font-weight: bold;
 }
-.btn-whatsapp:hover { 
-    background: #1EBE57; 
-}
+.btn-whatsapp:hover { background: #1EBE57; }
 
+/* Mensajes */
 #loading, #error-msg { 
-    font-size: 1.2rem; 
-    padding: 20px;
-    background: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeeba;
-    border-radius: 8px;
-    text-align: center;
-    margin-top: 20px;
-    display: none; 
+    font-size: 1.2rem; padding: 20px;
+    background: #fff3cd; color: #856404;
+    border: 1px solid #ffeeba; border-radius: 8px;
+    text-align: center; margin-top: 20px; display: none; 
 }
 
 #toast {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: var(--verde-oscuro);
-    color: white;
-    padding: 15px 25px;
-    border-radius: 8px;
+    position: fixed; bottom: 20px; right: 20px;
+    background: var(--verde-oscuro); color: white;
+    padding: 15px 25px; border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-    z-index: 1001;
-    font-weight: 600;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s; z-index: 1001; font-weight: 600;
 }
-#toast.show {
-    opacity: 1;
-    visibility: visible;
-}
+#toast.show { opacity: 1; visibility: visible; }
 
 @media (max-width: 768px) {
-    header h1 { font-size: 1.4rem; }
+    header h1 { font-size: 1.4rem; width: 100%; text-align: center; margin-bottom: 10px; }
     .tienda-container { flex-direction: column; margin: 10px; padding: 0; }
     .categorias { flex: auto; margin-bottom: 20px; position: static; }
     .categorias ul { display: flex; flex-wrap: wrap; gap: 5px; }
     .categorias li { flex-grow: 1; min-width: 100px; }
     .categorias li a { text-align: center; padding: 6px 10px; font-size: 0.9rem; }
     .grid-productos { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
-    .producto-card .cinta-oferta { padding: 3px 40px; font-size: 0.6rem; top: 5px; left: -25px; }
+    
+    header { flex-direction: column; }
+    .header-controles { width: 100%; justify-content: space-between; flex-wrap: wrap; }
+    .estado-local { margin-bottom: 5px; width: 100%; justify-content: center; }
+    .btn-header { flex-grow: 1; justify-content: center; }
 }
 </style>
 </head>
@@ -338,9 +357,20 @@ header h1 {
 
 <header>
     <h1>Verdulería "El Fresquito"</h1>
-    <button id="btn-ver-carrito" class="btn-carrito-header">
-        🛒 Carrito (<span id="total-header">$0.00</span>)
-    </button>
+    
+    <div class="header-controles">
+        <div id="indicador-estado" class="estado-local">
+            Cargando...
+        </div>
+
+        <button id="btn-abrir-horarios" class="btn-header btn-horarios">
+            📅 Horarios
+        </button>
+
+        <button id="btn-ver-carrito" class="btn-header btn-carrito">
+            🛒 Carrito (<span id="total-header">$0.00</span>)
+        </button>
+    </div>
 </header>
 
 <div class="tienda-container">
@@ -357,6 +387,25 @@ header h1 {
         <div id="productos-container" class="grid-productos"></div>
     </main>
 
+</div>
+
+<div id="modal-horarios" class="modal-overlay">
+    <div class="modal-content" style="max-width: 400px;">
+        <button class="modal-close" id="btn-cerrar-horarios">×</button>
+        <h2 style="text-align: center; color: var(--verde-oscuro);">Nuestros Horarios</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 20px;">Te esperamos en los siguientes horarios:</p>
+        
+        <ul class="lista-horarios">
+            <li data-dia="1"><span>Lunes</span> <span>09:00 - 13:00 y 17:00 - 21:00</span></li>
+            <li data-dia="2"><span>Martes</span> <span>09:00 - 13:00 y 17:00 - 21:00</span></li>
+            <li data-dia="3"><span>Miércoles</span> <span>09:00 - 13:00 y 17:00 - 21:00</span></li>
+            <li data-dia="4"><span>Jueves</span> <span>09:00 - 13:00 y 17:00 - 21:00</span></li>
+            <li data-dia="5"><span>Viernes</span> <span>09:00 - 13:00 y 17:00 - 21:00</span></li>
+            <li data-dia="6"><span>Sábado</span> <span>09:30 - 14:00</span></li>
+            <li data-dia="0"><span>Domingo</span> <span style="color: var(--rojo-cerrado); font-weight:bold;">Cerrado</span></li>
+        </ul>
+        <button onclick="document.getElementById('modal-horarios').classList.remove('visible')" class="btn-agregar">Entendido</button>
+    </div>
 </div>
 
 <div id="modal-carrito" class="modal-overlay">
@@ -388,20 +437,38 @@ const URL_SHEET_PRODUCTS = 'https://script.google.com/macros/s/AKfycbzYGCi5-tC-G
 const URL_SHEET_REGISTRO = 'https://script.google.com/macros/s/AKfycbwtF4_snK3Gv9JUwl3qybe7yOxtIXGkmR_zO5BIf_TZqv3Hrw2I87_v1FM4pQuYe_wQvw/exec';
 const WHATSAPP_NUMBER = '542664212722';
 
+// --- 🕒 CONFIGURACIÓN DE APERTURA (Lógica interna) ---
+// Formato: Hora inicio, Minuto inicio, Hora fin, Minuto fin
+// Si modificas los textos en el HTML de arriba, recuerda modificar esta lógica también.
+const HORARIOS = {
+    1: [[9, 0, 13, 0], [17, 0, 21, 0]], // Lunes
+    2: [[9, 0, 13, 0], [16, 30, 21, 0]], // Martes
+    3: [[9, 0, 13, 0], [17, 0, 21, 0]], // Miércoles
+    4: [[9, 0, 13, 0], [17, 0, 21, 0]], // Jueves
+    5: [[9, 0, 13, 0], [17, 0, 21, 0]], // Viernes
+    6: [[9, 30, 14, 0]],                // Sábado
+    0: []                               // Domingo (Cerrado)
+};
+
 const productosContainer = document.getElementById('productos-container');
 const categoriasLista = document.getElementById('categorias-lista');
 const loading = document.getElementById('loading');
 const errorMsg = document.getElementById('error-msg');
 const modal = document.getElementById('modal-carrito');
+const modalHorarios = document.getElementById('modal-horarios');
 const modalCarritoItemsContainer = document.getElementById('modal-carrito-items');
 const totalHeader = document.getElementById('total-header');
 const modalTotal = document.getElementById('modal-total');
 const btnEnviarPedido = document.getElementById('btn-enviar-pedido');
 const formCliente = document.getElementById('form-cliente');
 const toast = document.getElementById('toast');
+// Controles Header
+const btnVerCarrito = document.getElementById('btn-ver-carrito');
+const indicadorEstado = document.getElementById('indicador-estado');
 
 let productos = [];
 let carrito = [];
+let negocioAbierto = false; 
 
 // Fallback local
 const localProductos = [
@@ -421,6 +488,91 @@ const formatPrice = (price) => `$${Number(price).toFixed(2)}`;
 function safeImg(url) {
     if (!url) return 'https://via.placeholder.com/100/66BB6A/FFFFFF?text=🌱';
     try { const u = new URL(url); return u.href; } catch { return 'https://via.placeholder.com/100/66BB6A/FFFFFF?text=🌱'; }
+}
+
+// --- Lógica de Horarios y Estado ---
+function verificarEstadoNegocio() {
+    const ahora = new Date();
+    const diaSemana = ahora.getDay(); // 0-6 (0 es domingo)
+    const horaActual = ahora.getHours();
+    const minActual = ahora.getMinutes();
+    const tiempoActual = horaActual * 60 + minActual;
+
+    // Resaltar día actual en el modal de horarios
+    document.querySelectorAll('.lista-horarios li').forEach(li => li.classList.remove('dia-actual'));
+    const liHoy = document.querySelector(`.lista-horarios li[data-dia="${diaSemana}"]`);
+    if(liHoy) liHoy.classList.add('dia-actual');
+
+    const rangosHoy = HORARIOS[diaSemana];
+    let estaAbierto = false;
+
+    if (rangosHoy && rangosHoy.length > 0) {
+        for (let rango of rangosHoy) {
+            const inicio = rango[0] * 60 + rango[1];
+            const fin = rango[2] * 60 + rango[3];
+            if (tiempoActual >= inicio && tiempoActual < fin) {
+                estaAbierto = true;
+                break;
+            }
+        }
+    }
+
+    negocioAbierto = estaAbierto;
+    actualizarInterfazSegunEstado();
+}
+
+function actualizarInterfazSegunEstado() {
+    if (negocioAbierto) {
+        // ABIERTO
+        indicadorEstado.textContent = "🟢 Abierto";
+        indicadorEstado.classList.remove('cerrado');
+        
+        btnVerCarrito.disabled = false;
+        btnVerCarrito.classList.remove('deshabilitado');
+        btnVerCarrito.title = "Ver Carrito";
+    } else {
+        // CERRADO
+        indicadorEstado.textContent = "🔴 Cerrado";
+        indicadorEstado.classList.add('cerrado');
+        
+        btnVerCarrito.disabled = true;
+        btnVerCarrito.classList.add('deshabilitado');
+        btnVerCarrito.title = "El negocio está cerrado, no se pueden realizar pedidos.";
+        
+        // Si el carrito está abierto, lo cerramos
+        if (modal.classList.contains('visible')) {
+            modal.classList.remove('visible');
+            showToast("El negocio ha cerrado.");
+        }
+    }
+    
+    // Actualizar botones de productos
+    actualizarBotonesProductos();
+}
+
+function actualizarBotonesProductos() {
+    const botonesAgregar = document.querySelectorAll('.btn-agregar');
+    botonesAgregar.forEach(btn => {
+        // Si el botón está dentro del modal de horarios, lo ignoramos
+        if(btn.closest('#modal-horarios')) return;
+
+        if (!negocioAbierto) {
+            btn.disabled = true;
+            btn.textContent = "Cerrado";
+        } else {
+            const idProd = btn.getAttribute('data-id');
+            const prod = productos.find(p => p.id == idProd);
+            if (prod) {
+                if (prod.stock > 0) {
+                    btn.disabled = false;
+                    btn.textContent = "🛒 Agregar";
+                } else {
+                    btn.disabled = true;
+                    btn.textContent = "Sin Stock";
+                }
+            }
+        }
+    });
 }
 
 // --- Cargar productos ---
@@ -450,7 +602,7 @@ async function cargarProductosRemotos() {
         loading.style.display = 'none';
         generarCategorias();
         filtrarPorCategoria('todos');
-
+        verificarEstadoNegocio();
     }
 }
 
@@ -486,15 +638,22 @@ function renderizarProductos(productosFiltrados) {
             <img src="${safeImg(producto.img)}" alt="${producto.nombre}">
             <h3>${producto.nombre}</h3>
             <p class="precio">${formatPrice(producto.precio)}</p>
-            <button class="btn-agregar" data-id="${producto.id}" ${producto.stock<=0?'disabled':''}>
-                ${producto.stock<=0?'Sin Stock':'🛒 Agregar'}
+            <button class="btn-agregar" data-id="${producto.id}" disabled>
+                Cargando...
             </button>
         `;
         productosContainer.appendChild(card);
     });
 
+    actualizarBotonesProductos(); // Aplica estado y stock
+
     document.querySelectorAll('.btn-agregar').forEach(btn => {
         btn.addEventListener('click', () => {
+            if(btn.closest('#modal-horarios')) return; // Evitar clic en modal horarios
+            if (!negocioAbierto) {
+                showToast("El negocio está cerrado.");
+                return;
+            }
             const prod = productos.find(p => p.id == btn.dataset.id);
             agregarAlCarrito(prod);
         });
@@ -552,13 +711,33 @@ function actualizarCarritoUI() {
     });
 }
 
-// --- Modal ---
-document.getElementById('btn-ver-carrito').addEventListener('click',()=>modal.classList.add('visible'));
+// --- Manejo de Modales ---
+// Carrito
+document.getElementById('btn-ver-carrito').addEventListener('click', () => {
+    if (!negocioAbierto) {
+        showToast("El negocio está cerrado en este momento.");
+        return;
+    }
+    modal.classList.add('visible');
+});
 document.getElementById('btn-cerrar-modal').addEventListener('click',()=>modal.classList.remove('visible'));
 
+// Horarios
+document.getElementById('btn-abrir-horarios').addEventListener('click', () => {
+    modalHorarios.classList.add('visible');
+});
+document.getElementById('btn-cerrar-horarios').addEventListener('click', () => {
+    modalHorarios.classList.remove('visible');
+});
+
 // --- Enviar Pedido WhatsApp ---
-// --- Enviar Pedido WhatsApp y Registrar en Sheet ---
 btnEnviarPedido.addEventListener('click', async () => {
+    verificarEstadoNegocio();
+    if (!negocioAbierto) {
+        showToast("No se pueden enviar pedidos, el negocio cerró.");
+        return;
+    }
+
     const nombre = formCliente.nombre.value.trim();
     const celular = formCliente.celular.value.trim();
 
@@ -571,11 +750,9 @@ btnEnviarPedido.addEventListener('click', async () => {
 
     const totalCalculado = carrito.reduce((a, b) => a + b.precio * b.cantidad, 0);
 
-    // Deshabilitar botón y mostrar estado
     btnEnviarPedido.disabled = true;
     btnEnviarPedido.textContent = 'Procesando y Enviando...';
     
-    // 1. Preparar datos para el registro en Google Sheet
     let detalle_compra_sheet = carrito.map(item => 
         `${item.cantidad}x ${item.nombre} [${formatPrice(item.precio * item.cantidad)}]`
     ).join(' | ');
@@ -587,33 +764,19 @@ btnEnviarPedido.addEventListener('click', async () => {
         total: totalCalculado
     };
 
-    // 2. Realizar la llamada POST para registrar
     try {
         const fetchResp = await fetch(URL_SHEET_REGISTRO, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                // Importante: este Content-Type es crucial para Google Apps Script
-                'Content-Type': 'text/plain;charset=utf-8',
-            },
+            method: 'POST', mode: 'cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(datosParaRegistro)
         });
-
         const dataRegistro = await fetchResp.json();
-
-        if (dataRegistro.ok) {
-            showToast('✅ Pedido registrado en el sistema.');
-        } else {
-            console.error('Error al registrar:', dataRegistro.error);
-            showToast(`⚠️ Error en el registro: ${dataRegistro.error || 'Desconocido'}`);
-        }
-
+        if (dataRegistro.ok) showToast('✅ Pedido registrado en el sistema.');
+        else showToast(`⚠️ Error en el registro: ${dataRegistro.error || 'Desconocido'}`);
     } catch (error) {
-        // Esto captura errores de red o si el Script no responde
-        console.error('Error de conexión/fetch al registrar:', error);
+        console.error('Error de conexión:', error);
         showToast('❌ Error de conexión al servidor de registro.');
     } finally {
-        // 3. Generar y abrir el enlace de WhatsApp (siempre se abre)
         let mensaje = `*Pedido desde Verdulería El Fresquito*%0A%0A*Cliente:* ${nombre}%0A*Celular:* ${celular}%0A%0A*Productos:*%0A`;
         carrito.forEach(item => { mensaje += `${item.cantidad} x ${item.nombre} = ${formatPrice(item.precio * item.cantidad)}%0A`; });
         mensaje += `%0A*Total:* ${formatPrice(totalCalculado)}`;
@@ -621,7 +784,6 @@ btnEnviarPedido.addEventListener('click', async () => {
         const urlWhats = `https://wa.me/${WHATSAPP_NUMBER}?text=${mensaje}`;
         window.open(urlWhats, '_blank');
         
-        // Restaurar botón y cerrar modal
         btnEnviarPedido.disabled = false;
         btnEnviarPedido.textContent = '✅ Enviar Pedido por WhatsApp';
         modal.classList.remove('visible');
@@ -630,6 +792,7 @@ btnEnviarPedido.addEventListener('click', async () => {
 
 // --- Inicialización ---
 cargarProductosRemotos();
+setInterval(verificarEstadoNegocio, 60000);
 
 });
 </script>
